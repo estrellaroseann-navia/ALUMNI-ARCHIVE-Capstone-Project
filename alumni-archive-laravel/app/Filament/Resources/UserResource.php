@@ -70,6 +70,12 @@ class UserResource extends Resource
                             TextInput::make('province')->label('Province')->nullable(),
                             TextInput::make('postal_code')->label('Postal Code')->nullable(),
                             TextInput::make('country')->label('Country')->nullable(),
+                            Fieldset::make('Batch Year')->schema([
+                                Select::make('year_id')
+                                    ->relationship('year', 'name')
+                                    ->label('Select Year')
+                                    ->required(),
+                            ]),
                             Fieldset::make('Program Name')->schema([
                                 Select::make('program_id')
                                     ->relationship('program', 'name')
