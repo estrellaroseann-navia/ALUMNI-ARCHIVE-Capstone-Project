@@ -1,0 +1,21 @@
+/* Light Theme */
+:root {
+    --color-primary: #F19A5E;
+    --color-background: #FFFFFF;
+    --color-text: #4B4B4B;
+    --color-accent: #FEE3D8;
+}
+
+/* Dark Theme */
+.dark {
+    --color-primary: #FF7F50;
+    --color-background: #1A1A1A;
+    --color-text: #E0E0E0;
+    --color-accent: #8C6A54;
+}
+
+/* Example: Customize body background */
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
