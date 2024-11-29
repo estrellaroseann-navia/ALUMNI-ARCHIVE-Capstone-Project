@@ -8,6 +8,9 @@ use Filament\Widgets\Widget;
 use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Contracts\Support\Htmlable;
 use App\Filament\Resources\App\Filament\WidgetsResource\Widgets\StudentDashboardWidget;
+use App\Filament\Widgets\AlumniChart;
+use App\Filament\Widgets\AlumniPerCampus;
+use App\Filament\Widgets\AlumniPerProgram;
 
 class Dashboard extends Page
 {
@@ -44,10 +47,12 @@ class Dashboard extends Page
      */
     public function getWidgets(): array
     {
-        return Filament::getWidgets();
-        // return [
-        //     StudentDashboardWidget::class,
-        // ];
+        // return Filament::getWidgets();
+        return [
+            AlumniChart::class,
+            AlumniPerCampus::class,
+            AlumniPerProgram::class,
+        ];
     }
 
     /**

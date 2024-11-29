@@ -27,9 +27,4 @@ class UserProfile extends Model
     {
         return $this->belongsTo(Campus::class, 'campus_id');
     }
-
-    public function year()
-    {
-        return $this->belongsTo(Year::class, 'year_id');
-    }
 }

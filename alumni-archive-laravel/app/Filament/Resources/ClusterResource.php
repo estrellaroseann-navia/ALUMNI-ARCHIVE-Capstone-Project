@@ -23,13 +23,10 @@ class ClusterResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Campus Management'; // Replace with your desired group name
+        return 'Academic Management'; // Replace with your desired group name
     }
 
-    public static function getNavigationSort(): ?int
-    {
-        return 999; // Push this to the bottom
-    }
+
 
 
     public static function form(Form $form): Form

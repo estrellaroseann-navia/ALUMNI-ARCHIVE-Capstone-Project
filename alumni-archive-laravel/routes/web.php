@@ -23,3 +23,8 @@ Route::post('/login', [StudentLoginController::class, 'login'])->name('login');
 // Route::middleware(['auth:student'])->group(function () {
 //     Route::get('/', [StudentDashboardController::class, 'index'])->name('student.dashboard');
 // });
+
+use App\Filament\Resources\AccountSettingResource\Pages\EditAccountSetting;
+
+Route::get('/admin/account-settings/{record}/edit', [EditAccountSetting::class, '__invoke'])
+    ->name('filament.resources.account-settings.edit');

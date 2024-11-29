@@ -24,7 +24,7 @@ class CampusResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     public static function getNavigationGroup(): ?string
     {
-        return 'Campus Management'; // Replace with your desired group name
+        return 'Academic Management'; // Replace with your desired group name
     }
 
     public static function getNavigationSort(): ?int

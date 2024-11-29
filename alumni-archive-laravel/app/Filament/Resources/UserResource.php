@@ -39,10 +39,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Academic Management'; // Replace with your desired group name
-    }
+
 
 
     public static function form(Form $form): Form
@@ -70,12 +67,16 @@ class UserResource extends Resource
                             TextInput::make('province')->label('Province')->nullable(),
                             TextInput::make('postal_code')->label('Postal Code')->nullable(),
                             TextInput::make('country')->label('Country')->nullable(),
-                            Fieldset::make('Batch Year')->schema([
-                                Select::make('year_id')
-                                    ->relationship('year', 'name')
-                                    ->label('Select Year')
-                                    ->required(),
-                            ]),
+                            Select::make('graduate_year')
+                                ->label('Batch Year')
+                                ->options(function () {
+                                    $startYear = now()->year - 5; // 10 years back
+                                    $endYear = now()->year;  // 10 years ahead
+                                    return collect(range($startYear, $endYear))
+                                        ->mapWithKeys(fn($year) => [$year => $year])
+                                        ->toArray();
+                                })
+                                ->required(),
                             Fieldset::make('Program Name')->schema([
                                 Select::make('program_id')
                                     ->relationship('program', 'name')
@@ -192,10 +193,10 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('profile.campus.cluster.name')->label('Cluster')->searchable(),
                 TextColumn::make('profile.program.name')->label('Program')->searchable(),
+                TextColumn::make('profile.graduate_year')->label('Batch')->searchable(),
                 TextColumn::make('profile.first_name')->label('First Name')->searchable(),
                 TextColumn::make('profile.last_name')->label('Last Name')->searchable(),
                 TextColumn::make('email')->label('Email'),
-                IconColumn::make('status')->boolean()->label('Active?')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -203,6 +204,18 @@ class UserResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->filters([
+                SelectFilter::make('graduate_year')
+                    ->relationship('profile', 'graduate_year')
+                    ->label('Batch Year')
+                    ->options(function () {
+                        // Generate a range of years
+                        $startYear = now()->year - 5; // 10 years back
+                        $endYear = now()->year;  // 10 years ahead
+
+                        return collect(range($startYear, $endYear))
+                            ->mapWithKeys(fn($year) => [$year => $year])
+                            ->toArray();
+                    }),
                 SelectFilter::make('program')
                     ->relationship('profile.program', 'name') // Relationship for filtering
                     ->label('Filter by Program')

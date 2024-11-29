@@ -6,9 +6,10 @@ use Filament\Actions;
 use App\Imports\UsersImport;
 use Filament\Actions\Action;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use App\Filament\Resources\UserResource;
-use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Pages\ListRecords;
 
 
@@ -21,12 +22,25 @@ class ListUsers extends ListRecords
         return [
             Actions\CreateAction::make()->icon('heroicon-o-plus'),
             Action::make('importAlumni')->label('Import Alumni')->icon('heroicon-o-document')->button()->form([
-                FileUpload::make('file')
+                FileUpload::make('file')->disk('public'), // Ensure it uses the 'public' disk
             ])->action(function (array $data) {
-                $file = public_path('storage/' . $data['file']);
-                Excel::import(new UsersImport, $file);
+                // Get the file's storage path
+                $filePath = Storage::disk('public')->path($data['file']);
 
-                Notification::make()->title('Imported Successfully')->success()->send();
+                if (!file_exists($filePath)) {
+                    Notification::make()
+                        ->title('File not found')
+                        ->danger()
+                        ->send();
+                    return;
+                }
+
+                Excel::import(new UsersImport, $filePath);
+
+                Notification::make()
+                    ->title('Imported Successfully')
+                    ->success()
+                    ->send();
             })
         ];
     }

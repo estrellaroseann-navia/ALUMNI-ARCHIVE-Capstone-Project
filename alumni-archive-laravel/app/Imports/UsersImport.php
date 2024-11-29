@@ -25,18 +25,14 @@ class UsersImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // Use a database transaction to ensure atomicity
         return DB::transaction(function () use ($row) {
             // Lookup program and campus foreign keys
             $program = Program::where('name', $row['program_name'] ?? '')->first();
             $campus = Campus::where('name', $row['campus'] ?? '')->first();
-
-            foreach ($row as $rows) {
-                dd($rows['first_name']);
-            }
+            // dd($campus);
             // Validate required fields
             if (empty($row['first_name']) || empty($row['last_name'])) {
-                throw new \Exception('First Name and Last Name are required fields.');
+                throw new \Exception("First Name and Last Name are required fields. Row: " . json_encode($row));
             }
 
             $firstName = trim($row['first_name']);
@@ -46,7 +42,7 @@ class UsersImport implements ToModel, WithHeadingRow
             // Handle email and password
             $email = $row['email'] ?? $firstName . '@placeholder.com';
             $password = !empty($row['password'])
-                ? $row['password'] : Hash::make("$firstName@PSU");
+                ? Hash::make($row['password']) : Hash::make("$firstName@PSU");
 
             // Check if the user exists (by email) and update or create
             $user = User::updateOrCreate(
@@ -71,6 +67,7 @@ class UsersImport implements ToModel, WithHeadingRow
                     'province' => $row['province'] ?? null,
                     'postal_code' => $row['post_code'] ?? null,
                     'country' => $row['country'] ?? null,
+                    'graduate_year' => $row['graduate_year'],
                     'program_id' => $program?->id,
                     'campus_id' => $campus?->id,
                 ]
