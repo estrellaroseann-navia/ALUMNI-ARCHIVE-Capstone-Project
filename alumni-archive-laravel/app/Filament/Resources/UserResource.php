@@ -204,18 +204,19 @@ class UserResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->filters([
-                SelectFilter::make('graduate_year')
+                SelectFilter::make('profile')
                     ->relationship('profile', 'graduate_year')
                     ->label('Batch Year')
                     ->options(function () {
-                        // Generate a range of years
-                        $startYear = now()->year - 5; // 10 years back
-                        $endYear = now()->year;  // 10 years ahead
-
-                        return collect(range($startYear, $endYear))
-                            ->mapWithKeys(fn($year) => [$year => $year])
+                        // Fetch distinct graduate years from the related profile table
+                        return \App\Models\UserProfile::query()
+                            ->select('graduate_year')
+                            ->distinct() // Ensure only unique years are fetched
+                            ->orderBy('graduate_year', 'asc') // Optional: sort the years
+                            ->pluck('graduate_year', 'graduate_year') // Generate key-value pairs
                             ->toArray();
                     }),
+
                 SelectFilter::make('program')
                     ->relationship('profile.program', 'name') // Relationship for filtering
                     ->label('Filter by Program')
