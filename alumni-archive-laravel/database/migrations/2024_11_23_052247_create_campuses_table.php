@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cluster_id');
             $table->string('name');
             $table->string('location');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->foreign('cluster_id')->references('id')->on('clusters')->onDelete('cascade');

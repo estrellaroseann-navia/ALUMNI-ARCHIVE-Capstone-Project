@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

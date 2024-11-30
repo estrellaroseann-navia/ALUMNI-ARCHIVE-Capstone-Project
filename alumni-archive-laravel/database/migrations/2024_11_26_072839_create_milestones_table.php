@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('milestones', function (Blueprint $table) {
             $table->id();
             $table->longText('src');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->longText('link');
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

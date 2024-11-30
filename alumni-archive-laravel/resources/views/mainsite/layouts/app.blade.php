@@ -25,6 +25,7 @@
   <link href="{{ asset('vendor/aos/aos.css') }}" rel="stylesheet">
   <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
   <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <!-- Main CSS File -->
   <link rel="stylesheet" href="{{ asset('css/mainsite/main.css') }}">
@@ -47,7 +48,23 @@
           <li><a href="{{ route('donation.page') }}">Donation</a></li>
           <li><a href="{{ route('survey.page') }}">Take a Tracking Survey</a></li>
           <li><a href="{{ route('contact.page') }}">Contact</a></li>
-
+        <li>  <div class="ms-auto dropdown">
+                <a
+                    href="#"
+                    class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                    id="profileDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span class="me-2" id="navbarUserName">USER</span>
+                    <img src="profile.png" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                </ul>
+            </div></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -99,7 +116,6 @@
 
   <!-- Main JS File -->
    <script src="{{ asset('js/mainsite/main.js') }}"></script>
-
 </body>
 
 </html>

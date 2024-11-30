@@ -4,44 +4,29 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Program;
+use App\Models\Colleges;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Faker\Provider\ar_EG\Text;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\ProgramResource\Pages;
+use App\Filament\Resources\CollegesResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ProgramResource\RelationManagers;
+use App\Filament\Resources\CollegesResource\RelationManagers;
 
-class ProgramResource extends Resource
+class CollegesResource extends Resource
 {
-    protected static ?string $model = Program::class;
+    protected static ?string $model = Colleges::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Academic Management'; // Replace with your desired group name
-    }
-
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Subject')->required(),
+                TextInput::make('name')->label('College Name')->required(),
                 TextInput::make('description'),
-                Fieldset::make('College Name')->schema([
-                    Select::make('college_id')
-                        ->relationship('college', 'name')
-                        ->label('Select College')
-                        ->required(),
-                ]),
             ]);
     }
 
@@ -49,7 +34,7 @@ class ProgramResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label('Program ID'),
+                TextColumn::make('id')->label('Id'),
                 TextColumn::make('name'),
                 TextColumn::make('description')
             ])
@@ -76,9 +61,9 @@ class ProgramResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPrograms::route('/'),
-            'create' => Pages\CreateProgram::route('/create'),
-            'edit' => Pages\EditProgram::route('/{record}/edit'),
+            'index' => Pages\ListColleges::route('/'),
+            'create' => Pages\CreateColleges::route('/create'),
+            'edit' => Pages\EditColleges::route('/{record}/edit'),
         ];
     }
 }

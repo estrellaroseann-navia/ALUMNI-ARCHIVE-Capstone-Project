@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('clusters', function (Blueprint $table) {
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->id();
             $table->timestamps();

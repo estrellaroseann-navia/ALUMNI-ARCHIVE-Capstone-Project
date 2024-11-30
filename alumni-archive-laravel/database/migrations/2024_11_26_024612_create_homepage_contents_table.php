@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->longText('src');
             $table->longText('title');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

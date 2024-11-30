@@ -29,7 +29,6 @@ class UsersImport implements ToModel, WithHeadingRow
             // Lookup program and campus foreign keys
             $program = Program::where('name', $row['program_name'] ?? '')->first();
             $campus = Campus::where('name', $row['campus'] ?? '')->first();
-            // dd($campus);
             // Validate required fields
             if (empty($row['first_name']) || empty($row['last_name'])) {
                 throw new \Exception("First Name and Last Name are required fields. Row: " . json_encode($row));
