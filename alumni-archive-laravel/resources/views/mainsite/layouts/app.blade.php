@@ -43,11 +43,12 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('home.page') }}" class="active">Home</a></li>
-          <li><a href="{{ route('about.page') }}">About Us</a></li>
-          <li><a href="{{ route('donation.page') }}">Donation</a></li>
-          <li><a href="{{ route('survey.page') }}">Take a Tracking Survey</a></li>
-          <li><a href="{{ route('contact.page') }}">Contact</a></li>
+            <li><a href="{{ route('home.page') }}" class="{{ request()->routeIs('home.page') ? 'active' : '' }}">Home</a></li>
+            <li><a href="{{ route('about.page') }}" class="{{ request()->routeIs('about.page') ? 'active' : '' }}">About Us</a></li>
+            <li><a href="{{ route('donation.page') }}" class="{{ request()->routeIs('donation.page') ? 'active' : '' }}">Donation</a></li>
+            <li><a href="{{ route('survey.page') }}" class="{{ request()->routeIs('survey.page') ? 'active' : '' }}">Take a Tracking Survey</a></li>
+            <li><a href="{{ route('contact.page') }}" class="{{ request()->routeIs('contact.page') ? 'active' : '' }}">Contact</a></li>
+
         <li>  <div class="ms-auto dropdown">
                 <a
                     href="#"
