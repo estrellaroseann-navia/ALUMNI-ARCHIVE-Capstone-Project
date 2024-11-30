@@ -59,6 +59,7 @@ class UserResource extends Resource
                                 ->options([
                                     'Employed' => 'Employed',
                                     'Unemployed' => 'Unemployed',
+                                    'Untracked' => 'Untracked',
                                 ])
                                 ->label('Employment Status')
                                 ->nullable(),
@@ -191,12 +192,25 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('profile.campus.cluster.name')->label('Cluster')->searchable(),
-                TextColumn::make('profile.program.name')->label('Program')->searchable(),
-                TextColumn::make('profile.graduate_year')->label('Batch')->searchable(),
                 TextColumn::make('profile.first_name')->label('First Name')->searchable(),
                 TextColumn::make('profile.last_name')->label('Last Name')->searchable(),
                 TextColumn::make('email')->label('Email'),
+                IconColumn::make('profile.employment_status')->label('Employement Status')
+                    ->icon(fn(string $state): string => match ($state) {
+                        'Employed' => 'heroicon-o-check',
+                        'Unemployed' => 'heroicon-o-x-mark',
+                        'Untracked' => 'heroicon-o-question-mark-circle',
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'Employed' => 'success',
+                        'Unemployed' => 'danger',
+                        'Untracked' => 'warning',
+                        default => 'gray',
+                    }),
+                TextColumn::make('profile.program.name')->label('Program')->searchable(),
+                TextColumn::make('profile.graduate_year')->label('Batch')->searchable(),
+                TextColumn::make('profile.campus.cluster.name')->label('Cluster')->searchable(),
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
