@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDonationContent extends CreateRecord
 {
     protected static string $resource = DonationContentResource::class;
+
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

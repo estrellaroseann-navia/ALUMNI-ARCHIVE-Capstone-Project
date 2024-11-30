@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMilestone extends CreateRecord
 {
     protected static string $resource = MilestoneResource::class;
+
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
