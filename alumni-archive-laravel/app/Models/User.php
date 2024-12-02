@@ -64,13 +64,4 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->is_admin == 1;
     }
-
-
-
-    public function panel(Panel $panel): Panel
-    {
-        return $panel
-
-            ->passwordReset();
-    }
 }
