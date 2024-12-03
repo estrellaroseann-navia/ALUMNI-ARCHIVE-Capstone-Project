@@ -1,22 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\MainSiteController;
+namespace App\Http\Controllers;
 
 use App\Models\Survey;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class TakeSurveyController extends Controller
+class SurveyController extends Controller
 {
-    public function index()
-    {
-        return view('mainsite.pages.survey');
-    }
-
     public function storeSurvey(Request $request)
     {
-
-        $user_id = auth('student')->user()->id;
+        dd('shit');
+        $user_id = auth('student')->id();
         // Validate the incoming request data
         $validatedData = $request->validate([
             'graduation_year' => 'required|integer|digits:4', // Graduation year validation

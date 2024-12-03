@@ -11,6 +11,7 @@ use App\Filament\Resources\App\Filament\WidgetsResource\Widgets\StudentDashboard
 use App\Filament\Widgets\AlumniChart;
 use App\Filament\Widgets\AlumniPerCampus;
 use App\Filament\Widgets\AlumniPerProgram;
+use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class Dashboard extends Page
 {
@@ -49,6 +50,7 @@ class Dashboard extends Page
     {
         // return Filament::getWidgets();
         return [
+            // StudentDashboardWidget::class,
             AlumniChart::class,
             AlumniPerCampus::class,
             AlumniPerProgram::class,

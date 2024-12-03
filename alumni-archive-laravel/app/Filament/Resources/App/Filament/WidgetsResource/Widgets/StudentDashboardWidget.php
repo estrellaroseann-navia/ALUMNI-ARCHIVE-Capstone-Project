@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\App\Filament\WidgetsResource\Widgets;
 
-use Filament\Widgets\Widget;
+use DB;
 use App\Models\User;
-use App\Models\UserProfile;
-use App\Models\Program;
 use App\Models\Campus;
+use App\Models\Program;
 use Illuminate\View\View;
+use App\Models\UserProfile;
+use Filament\Widgets\Widget;
 use Filament\Forms\Components\Select;
 
 class StudentDashboardWidget extends Widget
@@ -17,6 +18,8 @@ class StudentDashboardWidget extends Widget
     public ?string $campus = null;
     public ?string $cluster = null;
     public ?int $graduateYear = null;
+
+    protected int | string | array $columnSpan = 'full';
 
     protected static string $view = 'filament.widgets.student-dashboard-widget';
 
@@ -45,16 +48,14 @@ class StudentDashboardWidget extends Widget
 
         $this->alumniCount = $query->count();
     }
-
     public function render(): View
     {
-        // Data for graphs
-        $graduateYears = UserProfile::select('graduate_year', \DB::raw('count(*) as total'))
+        $graduateYears = UserProfile::select('graduate_year', DB::raw('count(*) as total'))
             ->groupBy('graduate_year')
             ->orderBy('graduate_year')
             ->get();
 
-        $programs = UserProfile::select('program_id', \DB::raw('count(*) as total'))
+        $programs = UserProfile::select('program_id', DB::raw('count(*) as total'))
             ->groupBy('program_id')
             ->with('program') // Include the program name
             ->get();
@@ -63,11 +64,11 @@ class StudentDashboardWidget extends Widget
             'alumniCount' => $this->alumniCount,
             'programs' => Program::pluck('name', 'id'),
             'campuses' => Campus::pluck('name', 'id'),
-            'graduateYears' => UserProfile::distinct()->pluck('graduate_year'),
-            'graduateYearsData' => $graduateYears, // Data for line graph
-            'programsData' => $programs, // Data for pie chart
+            'graduateYearsData' => $graduateYears,
+            'programsData' => $programs,
         ]);
     }
+
 
     public function getFormSchema(): array
     {

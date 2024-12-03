@@ -20,9 +20,10 @@ Route::post('/send-message', [ContactController::class, 'createmessage'])->name(
 Route::get('/login', [StudentLoginController::class, 'showLoginForm'])->name('student.login');
 Route::post('/login', [StudentLoginController::class, 'login'])->name('login');
 
-// Route::middleware(['auth:student'])->group(function () {
-//     Route::get('/', [StudentDashboardController::class, 'index'])->name('student.dashboard');
-// });
+Route::middleware(['auth:student'])->group(function () {
+    Route::get('/survey', [TakeSurveyController::class, 'index'])->name('survey.page');
+    Route::post('/survey/send', [TakeSurveyController::class, 'storeSurvey'])->name('send.survey');
+});
 
 use App\Filament\Resources\AccountSettingResource\Pages\EditAccountSetting;
 

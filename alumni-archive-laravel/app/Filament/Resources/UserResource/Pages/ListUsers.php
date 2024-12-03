@@ -3,14 +3,19 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use Filament\Actions;
+use App\Models\Campus;
+use App\Models\Program;
 use App\Models\UserProfile;
 use App\Imports\UsersImport;
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Facades\Storage;
 use App\Exports\UserProfileReportExport;
 use App\Filament\Resources\UserResource;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Pages\ListRecords;
@@ -45,34 +50,74 @@ class ListUsers extends ListRecords
                     ->success()
                     ->send();
             }),
-            Action::make('generateReport')->label('Generate Report')->icon('heroicon-o-document-arrow-down')->button()->action(function (array $data) {
-                $graduateYearCounts = UserProfile::select('graduate_year', DB::raw('COUNT(*) as total'))
-                    ->groupBy('graduate_year')
-                    ->get();
+            Action::make('generateReport')
+                ->label('Generate Report')
+                ->icon('heroicon-o-document-arrow-down')
+                ->button()
+                ->form([
+                    Select::make('campus_id')
+                        ->label('Campus')
+                        ->options(Campus::pluck('name', 'id'))
+                        ->placeholder('Select a campus'),
 
-                $campusCounts = UserProfile::with('campus')
-                    ->select('campus_id', DB::raw('COUNT(*) as total'))
-                    ->groupBy('campus_id')
-                    ->get();
+                    Select::make('program_id')
+                        ->label('Program')
+                        ->options(Program::pluck('name', 'id'))
+                        ->placeholder('Select a program'),
 
-                $programCounts = UserProfile::with('program')
-                    ->select('program_id', DB::raw('COUNT(*) as total'))
-                    ->groupBy('program_id')
-                    ->get();
+                    TextInput::make('graduate_year')
+                        ->label('Graduate Year')
+                        ->placeholder('Enter Graduate Year'),
 
-                $data = [
-                    'graduate_years' => $graduateYearCounts,
-                    'campuses' => $campusCounts,
-                    'programs' => $programCounts,
-                ];
+                    Toggle::make('export_all')
+                        ->label('Export All')
+                        ->helperText('Export all data regardless of filters.')
+                        ->default(false),
+                ])
+                ->action(function (array $data) {
+                    $query = UserProfile::query();
 
-                return Excel::download(new UserProfileReportExport($data), 'user_profile_report.xlsx');
+                    // Apply filters only if 'export_all' is false
+                    if (empty($data['export_all'])) {
+                        if (!empty($data['campus_id'])) {
+                            $query->where('campus_id', $data['campus_id']);
+                        }
 
-                Notification::make()
-                    ->title('Generated Successfully')
-                    ->success()
-                    ->send();
-            })
+                        if (!empty($data['program_id'])) {
+                            $query->where('program_id', $data['program_id']);
+                        }
+
+                        if (!empty($data['graduate_year'])) {
+                            $query->where('graduate_year', $data['graduate_year']);
+                        }
+                    }
+
+                    // Fetch data for export
+                    $profiles = $query->with(['campus', 'program'])
+                        ->get(['last_name', 'first_name', 'middle_name', 'complete_address', 'campus_id', 'program_id']);
+
+                    // Prepare data for Excel export
+                    $formattedData = $profiles->map(function ($profile) {
+                        return [
+                            'Last Name' => $profile->last_name,
+                            'First Name' => $profile->first_name,
+                            'Middle Name' => $profile->middle_name,
+                            'Address' => $profile->complete_address,
+                            'Campus' => $profile->campus->name ?? 'N/A',
+                            'Program' => $profile->program->name ?? 'N/A',
+                        ];
+                    });
+
+                    // Export the data as an Excel file
+                    return Excel::download(new UserProfileReportExport($formattedData), 'alumni_list.xlsx');
+
+                    Notification::make()
+                        ->title('Generated Successfully')
+                        ->success()
+                        ->send();
+                })
+
+
         ];
     }
 }

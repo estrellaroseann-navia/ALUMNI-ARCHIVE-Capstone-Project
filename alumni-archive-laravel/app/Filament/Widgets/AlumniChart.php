@@ -28,6 +28,8 @@ class AlumniChart extends ChartWidget
                     'data' => $graduateCounts,  // Graduate counts for each year
                     'borderColor' => 'rgb(75, 192, 192)',
                     'fill' => false,
+                    'data' => [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500,]
+
                 ],
             ],
             'labels' => $years,  // Graduate years

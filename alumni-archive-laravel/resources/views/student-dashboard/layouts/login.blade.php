@@ -79,14 +79,6 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
             </div>
 
-            <div class="mb-4 d-flex justify-content-between align-items-center">
-                <div>
-                    <input type="checkbox" id="rememberMe" name="remember">
-                    <label for="rememberMe" class="form-check-label">Remember me</label>
-                </div>
-                <a href="#" class="text-muted">Forgot password?</a>
-            </div>
-
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
     </div>

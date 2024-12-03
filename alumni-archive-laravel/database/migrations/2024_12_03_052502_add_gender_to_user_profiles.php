@@ -9,13 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void {}
+    public function up(): void
+    {
+        Schema::table('user_profiles', function (Blueprint $table) {
+            $table->string('gender')->nullable();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_profiles');
+        Schema::table('user_profiles', function (Blueprint $table) {
+            $table->dropColumn('gender');
+        });
     }
 };

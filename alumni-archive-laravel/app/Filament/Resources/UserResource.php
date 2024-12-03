@@ -55,6 +55,12 @@ class UserResource extends Resource
                             TextInput::make('first_name')->label('First Name')->required(),
                             TextInput::make('middle_name')->label('Middle Name')->nullable(),
                             TextInput::make('last_name')->label('Last Name')->required(),
+                            Select::make('gender')
+                                ->options([
+                                    'Male' => 'Male',
+                                    'Female' => 'Female',
+                                    'Other' => 'Other',
+                                ]),
                             Select::make('employment_status')
                                 ->options([
                                     'Employed' => 'Employed',
@@ -214,7 +220,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->filters([
@@ -222,12 +228,10 @@ class UserResource extends Resource
                     ->relationship('profile', 'graduate_year')
                     ->label('Batch Year')
                     ->options(function () {
-                        // Fetch distinct graduate years from the related profile table
-                        return \App\Models\UserProfile::query()
-                            ->select('graduate_year')
-                            ->distinct() // Ensure only unique years are fetched
-                            ->orderBy('graduate_year', 'asc') // Optional: sort the years
-                            ->pluck('graduate_year', 'graduate_year') // Generate key-value pairs
+                        $startYear = now()->year - 5; // 10 years back
+                        $endYear = now()->year;  // 10 years ahead
+                        return collect(range($startYear, $endYear))
+                            ->mapWithKeys(fn($year) => [$year => $year])
                             ->toArray();
                     }),
 
@@ -256,12 +260,17 @@ class UserResource extends Resource
         ];
     }
 
+    public static function CanEditRecords(): bool
+    {
+        return false; // Prevent all users from editing
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            // 'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 
