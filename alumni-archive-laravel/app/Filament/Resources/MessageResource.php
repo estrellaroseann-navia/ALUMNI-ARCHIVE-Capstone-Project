@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Mail\Reply;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Message;
@@ -9,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
@@ -43,6 +45,7 @@ class MessageResource extends Resource
                 TextInput::make('name'),
                 TextInput::make('email'),
                 Textarea::make('message'),
+
             ]);
     }
 
@@ -52,6 +55,7 @@ class MessageResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Name')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
+                TextColumn::make('message')->label('Message')->limit(32),
                 CheckboxColumn::make('status')->label('Read'),
             ])
             ->filters([
@@ -67,6 +71,41 @@ class MessageResource extends Resource
                 }),
 
                 Tables\Actions\DeleteAction::make(),
+
+                Action::make('reply')
+                    ->label('Reply')
+                    ->modalHeading('Reply to Message')
+                    ->button('Send Reply') // Set the button text for the modal
+                    ->form([
+                        Textarea::make('reply')
+                            ->label('Your Reply')
+                            ->placeholder('Write your reply here...')
+                            ->required(), // Make the reply field required
+                    ])
+                    ->action(function (Message $record, array $data) {
+                        // Access the 'reply' value from the form data
+                        $reply = $data['reply']; // This is the value entered in the Textarea
+
+                        if (!empty($reply)) {
+                            // Send the email with the reply content
+                            Mail::to($record->email)->send(new Reply($reply));
+
+                            // Send a success notification after the email is sent
+                            Notification::make()
+                                ->title('Reply Sent')
+                                ->success()
+                                ->send();
+                        } else {
+                            // Handle error if the reply is empty (fallback if validation fails)
+                            Notification::make()
+                                ->title('Reply is required')
+                                ->danger()
+                                ->send();
+                        }
+                    })
+
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

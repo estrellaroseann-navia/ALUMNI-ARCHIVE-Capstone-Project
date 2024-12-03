@@ -49,27 +49,37 @@
             <li><a href="{{ route('survey.page') }}" class="{{ request()->routeIs('survey.page') ? 'active' : '' }}">Take a Tracking Survey</a></li>
             <li><a href="{{ route('contact.page') }}" class="{{ request()->routeIs('contact.page') ? 'active' : '' }}">Contact</a></li>
 
-        <li>  <div class="ms-auto dropdown">
-                <a
-                    href="#"
-                    class="d-flex align-items-center text-decoration-none dropdown-toggle"
-                    id="profileDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <span class="me-2" id="navbarUserName">USER</span>
-                    <img src="profile.png" alt="User Avatar" class="rounded-circle" style="width: 40px; height: 40px;">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                </ul>
-            </div></li>
+
+    @auth('student')
+    <li> <!-- Check if the 'student' guard is authenticated -->
+        <div class="ms-auto dropdown">
+            <a
+                href="#"
+                class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                id="profileDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span class="me-2" id="navbarUserName">{{ auth('student')->user()->profile->first_name }}</span> <!-- Show the student's first name -->
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+        </div>
+    </li>
+    @endauth
+
+
+
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
+       @guest('student')
+    <!-- Content to be shown when the student is not logged in -->
+        <a class="btn btn-warning active " href="{{ route('login') }}">Login</a>
+        @endguest
     </div>
   </header>
 

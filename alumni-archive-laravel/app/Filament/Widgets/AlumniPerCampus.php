@@ -10,6 +10,17 @@ class AlumniPerCampus extends ChartWidget
 {
     protected static ?string $heading = 'Graduates Per Campus';
     protected static ?int $sort = 2;
+
+    function generateColorFromString($string)
+    {
+        $hash = md5($string); // Generate a hash from the string
+        $red = hexdec(substr($hash, 0, 2)) % 256;
+        $green = hexdec(substr($hash, 2, 2)) % 256;
+        $blue = hexdec(substr($hash, 4, 2)) % 256;
+
+        return "rgb($red, $green, $blue)";
+    }
+
     protected function getData(): array
     {
         // Query the number of graduates per campus
@@ -21,6 +32,10 @@ class AlumniPerCampus extends ChartWidget
         // Prepare the data for the chart
         $campuses = $graduatesPerCampus->pluck('campus.name')->toArray();  // Get campus names
         $graduateCounts = $graduatesPerCampus->pluck('total')->toArray();  // Get the graduate counts
+        $colors = [];
+        foreach ($graduateCounts as $program) {
+            $colors[] = $this->generateColorFromString($program);
+        }
 
         return [
             'datasets' => [
@@ -29,6 +44,7 @@ class AlumniPerCampus extends ChartWidget
                     'data' => $graduateCounts,  // Graduate counts for each campus
                     'borderColor' => 'rgb(75, 192, 192)',
                     'fill' => false,
+                    'backgroundColor' => $colors
                 ],
             ],
             'labels' => $campuses,  // Labels as campus names

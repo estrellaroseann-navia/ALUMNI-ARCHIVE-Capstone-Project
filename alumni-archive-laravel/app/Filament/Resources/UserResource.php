@@ -69,6 +69,25 @@ class UserResource extends Resource
                                 ])
                                 ->label('Employment Status')
                                 ->nullable(),
+                            TextInput::make('employment_company')->label('Company Name')->required(),
+                            Select::make('occupational_status')
+                                ->options([
+                                    'Govenrment' => 'Govenrment',
+                                    'Private' => 'Private',
+                                    'Other' => 'Other',
+                                ])
+                                ->label('Employment Status')
+                                ->nullable(),
+                            Select::make('employment_year')
+                                ->label('Employment Year')
+                                ->options(function () {
+                                    $startYear = now()->year - 5; // 10 years back
+                                    $endYear = now()->year;  // 10 years ahead
+                                    return collect(range($startYear, $endYear))
+                                        ->mapWithKeys(fn($year) => [$year => $year])
+                                        ->toArray();
+                                })
+                                ->required(),
                             Textarea::make('complete_address')->label('Complete Address')->nullable(),
                             TextInput::make('city')->label('City')->nullable(),
                             TextInput::make('province')->label('Province')->nullable(),
