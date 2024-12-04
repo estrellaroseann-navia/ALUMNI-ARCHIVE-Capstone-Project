@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Campus;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
+    public function index()
+    {
+        $campuses = Campus::all();
+        $programs = Program::all();
+        return view('student-dashboard.layouts.sign-up', compact('campuses', 'programs'));
+    }
     public function store(Request $request)
     {
+
         // Validate incoming request
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users,email',
@@ -47,11 +56,14 @@ class SignUpController extends Controller
                 'password' => Hash::make($request->input('password')), // Hash the password
             ]);
             $user->profile()->create([
+                'campus_id' => $request->input('campus_id'),
+                'program_id' => $request->input('program_id'),
                 'first_name' => $request->input('first_name'),          // First Name
                 'middle_name' => $request->input('middle_name'),        // Middle Name
                 'last_name' => $request->input('last_name'),            // Last Name
                 'gender' => $request->input('gender'),                  // Gender
-                'employment_status' => $request->input('employment_status'), // Employment Status
+                'employment_status' => $request->input('employment_status'),
+                'occupational_status' => $request->input('occupational_status'), // Employment Status
                 'employment_company' => $request->input('company_name'),      // Company Name
                 'employment_year' => $request->input('employment_year'), // Employment Year
                 'complete_address' => $request->input('complete_address'), // Complete Address

@@ -8,6 +8,7 @@ use App\Http\Controllers\MainSiteController\ContactController;
 use App\Http\Controllers\MainSiteController\DonationController;
 use App\Http\Controllers\MainSiteController\HomepageController;
 use App\Http\Controllers\MainSiteController\TakeSurveyController;
+use App\Http\Controllers\ProfileEdit;
 use App\Http\Controllers\SignUpController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home.page');
@@ -22,14 +23,20 @@ Route::get('/login', [StudentLoginController::class, 'showLoginForm'])->name('st
 Route::post('/login', [StudentLoginController::class, 'login'])->name('login');
 Route::get('/logout', [StudentDashboardController::class, 'logout'])->name('logout');
 
-Route::get('/register', function () {
-    return view('student-dashboard.layouts.sign-up'); // This will return the view located at resources/views/auth/register.blade.php
-});
+
+
+
+
 Route::post('/send-register', [SignUpController::class, 'store'])->name('register');
+Route::get('/register', [SignUpController::class, 'index'])->name('register.form');
+
 
 Route::middleware(['auth:student'])->group(function () {
     Route::get('/survey', [TakeSurveyController::class, 'index'])->name('survey.page');
     Route::post('/survey/send', [TakeSurveyController::class, 'storeSurvey'])->name('send.survey');
+
+    Route::get('/profile', [ProfileEdit::class, 'index'])->name('edit.profile');
+    Route::post('/profile/update', [ProfileEdit::class, 'update'])->name('profile.update');
 });
 
 use App\Filament\Resources\AccountSettingResource\Pages\EditAccountSetting;

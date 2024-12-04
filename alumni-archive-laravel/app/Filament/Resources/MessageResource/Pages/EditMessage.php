@@ -14,6 +14,8 @@ class EditMessage extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+
+
         ];
     }
 }

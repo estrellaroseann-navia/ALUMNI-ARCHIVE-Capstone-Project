@@ -232,6 +232,7 @@ class UserResource extends Resource
                         'Untracked' => 'warning',
                         default => 'gray',
                     }),
+                TextColumn::make('profile.occupational_status')->label('Occupational Status')->searchable(),
                 TextColumn::make('profile.program.name')->label('Program')->searchable(),
                 TextColumn::make('profile.graduate_year')->label('Batch')->searchable(),
                 TextColumn::make('profile.campus.cluster.name')->label('Cluster')->searchable(),

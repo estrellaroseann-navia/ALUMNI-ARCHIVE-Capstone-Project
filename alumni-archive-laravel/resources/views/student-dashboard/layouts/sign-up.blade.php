@@ -88,8 +88,8 @@ body {
 
 <body>
 
-    <div class="p-4 shadow-lg card">
-        <h2 class="mb-4 text-center">Student Registration</h2>
+    <div  style="margin-top: 1000px"class="p-4 shadow-lg card">
+        <h2 class="mb-4 text-center">Alumni Registration</h2>
 
         <form action="{{ route('register') }}" method="POST">
             @csrf
@@ -105,6 +105,7 @@ body {
             @endif
 
             <!-- Name Fields in 2 columns -->
+             <h3 style="color: #f27c28;">Personal Information</h3>
             <div class="mb-3 row">
                 <div class="col-md-6">
                     <label for="first_name" class="form-label">First Name</label>
@@ -114,41 +115,51 @@ body {
                     <label for="middle_name" class="form-label">Middle Name</label>
                     <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Enter your middle name">
                 </div>
-            </div>
-
-            <div class="mb-3 row">
                 <div class="col-md-6">
                     <label for="last_name" class="form-label">Last Name</label>
                     <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="email" class="form-label">Email Address</label>
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="">Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+
+
+            <!-- Password Fields -->
+            <h3 style="color: #f27c28;">Account Information</h3>
+            <div class="mb-3 row">
+                   <div class="col-md-6">
+                    <label for="name" class="form-label">User Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your user name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Corporate Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                 </div>
             </div>
 
-            <!-- Password Fields -->
             <div class="mb-3 row">
-                   <div class="col-md-4">
-                    <label for="name" class="form-label">User Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your user name" required>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="password_confirmation" class="form-label">Confirm Password</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
                 </div>
             </div>
 
             <!-- Employment Fields in 2 columns -->
+            <h3 style="color: #f27c28;">Employment Information</h3>
             <div class="mb-3 row">
-                <div class="col-md-6">
-                    <label for="employment_status" class="form-label">Employment Status</label>
-                    <input type="text" class="form-control" id="employment_status" name="employment_status" placeholder="Enter your employment status" required>
-                </div>
+            <div class="col-md-6"> <label for="employment_status" class="form-label">Employment Status</label> <select class="form-control" id="employment_status" name="employment_status" required> <option value="">Select your employment status</option> <option value="Employed">Employed</option> <option value="Unemployed">Unemployed</option> <option value="Untracked">Untracked</option> </select> </div>
                 <div class="col-md-6">
                     <label for="company_name" class="form-label">Company Name</label>
                     <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Enter your company name" required>
@@ -157,16 +168,60 @@ body {
 
             <div class="mb-3 row">
                 <div class="col-md-6">
-                    <label for="employment_year" class="form-label">Employment Year</label>
+                    <label for="employment_year" class="form-label">Year of Employment</label>
                     <input type="number" class="form-control" id="employment_year" name="employment_year" placeholder="Enter your employment year" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="batch_year" class="form-label">Batch Year</label>
-                    <input type="number" class="form-control" id="batch_year" name="batch_year" placeholder="Enter your batch year" required>
+                    <label for="occupational_status" class="form-label">Occupational Status</label>
+                    <select class="form-control" id="occupational_status" name="occupational_status" required>
+                        <option value="">Select your occupational status</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                        <option value="Government">Government</option>
+                        <option value="Self-Employed">Self-Employed</option>
+                    </select>
+                </div>
+            </div>
+
+
+
+            <h3 style="color: #f27c28;">Academic Information</h3>
+            <div class="col-md-12">
+                <label for="batch_year" class="form-label">Year Graduated</label>
+                <input type="number" class="form-control" id="batch_year" name="batch_year" placeholder="Enter your batch year" required>
+            </div>
+
+            <!-- TRY TRY -->
+
+            <div class="mb-3 row">
+               <div class="col-md-6">
+                    <label for="occupational_status" class="form-label">
+                        Program
+                    </label>
+                    <select class="form-control select" id="occupational_status" name="program_id" required>
+                        <option value="">Select your occupational status</option>
+                        @foreach ($programs as $program )
+                            <option value="{{ $program->id }}">{{ $program->name }}</option>
+                        @endforeach
+
+                    </select>
+                </div>
+                   <div class="col-md-6">
+                    <label for="occupational_status" class="form-label">
+                        Campus
+                    </label>
+                    <select class="form-control select" id="occupational_status" name="campus_id" required>
+                        <option value="">Select your occupational status</option>
+                        @foreach ($campuses as $campus )
+                            <option value="{{ $campus->id }}">{{ $campus->name }}</option>
+                        @endforeach
+
+                    </select>
                 </div>
             </div>
 
             <!-- Address Fields in 2 columns -->
+            <h3 style="color: #f27c28;">Address Information</h3>
             <div class="mb-3 row">
                 <div class="col-md-6">
                     <label for="complete_address" class="form-label">Complete Address</label>
@@ -204,3 +259,4 @@ body {
 </body>
 
 </html>
+
